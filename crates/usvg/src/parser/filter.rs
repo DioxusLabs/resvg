@@ -835,6 +835,7 @@ fn convert_image_inner(
     let mut root = Group::empty();
     super::image::convert_inner(
         img_data,
+        href,
         cache.gen_image_id().take(),
         true,
         rendering_mode,

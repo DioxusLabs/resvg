@@ -81,8 +81,14 @@ pub fn apply(matrix: &ConvolveMatrix, src: ImageRefMut) {
 
         let bounded_new_a = f32_bound(0.0, new_a, 1.0);
 
+        let bias = if matrix.preserve_alpha() {
+            matrix.bias()
+        } else {
+            matrix.bias() * new_a
+        };
+
         let calc = |x| {
-            let x = x / matrix.divisor().get() + matrix.bias() * new_a;
+            let x = x / matrix.divisor().get() + bias;
 
             let x = if matrix.preserve_alpha() {
                 f32_bound(0.0, x, 1.0) * bounded_new_a

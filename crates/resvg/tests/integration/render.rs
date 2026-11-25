@@ -116,6 +116,7 @@ use crate::render;
 #[test] fn filters_feConvolveMatrix_order_eq_4_2() { assert_eq!(render("tests/filters/feConvolveMatrix/order=4-2"), 0); }
 #[test] fn filters_feConvolveMatrix_order_eq_4_4() { assert_eq!(render("tests/filters/feConvolveMatrix/order=4-4"), 0); }
 #[test] fn filters_feConvolveMatrix_order_eq_4() { assert_eq!(render("tests/filters/feConvolveMatrix/order=4"), 0); }
+#[test] fn filters_feConvolveMatrix_preserveAlpha_eq_true_with_bias() { assert_eq!(render("tests/filters/feConvolveMatrix/preserveAlpha=true-with-bias"), 0); }
 #[test] fn filters_feConvolveMatrix_preserveAlpha_eq_true() { assert_eq!(render("tests/filters/feConvolveMatrix/preserveAlpha=true"), 0); }
 #[test] fn filters_feConvolveMatrix_targetX_eq__1() { assert_eq!(render("tests/filters/feConvolveMatrix/targetX=-1"), 0); }
 #[test] fn filters_feConvolveMatrix_targetX_eq_0() { assert_eq!(render("tests/filters/feConvolveMatrix/targetX=0"), 0); }

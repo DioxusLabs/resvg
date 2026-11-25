@@ -434,7 +434,7 @@ fn apply_inner(
             }
             usvg::filter::Kind::ConvolveMatrix(fe) => {
                 let input = get_input(fe.input(), region, source, &results)?;
-                apply_convolve_matrix(fe, cs, input)
+                apply_convolve_matrix(fe, cs, region, subregion, input)
             }
             usvg::filter::Kind::Morphology(fe) => {
                 let input = get_input(fe.input(), region, source, &results)?;
@@ -917,15 +917,37 @@ fn apply_color_matrix(
 fn apply_convolve_matrix(
     fe: &usvg::filter::ConvolveMatrix,
     cs: usvg::filter::ColorInterpolation,
+    region: IntRect,
+    subregion: IntRect,
     input: Image,
 ) -> Result<Image, Error> {
     let mut pixmap = input.into_color_space(cs)?.take()?;
 
-    if fe.preserve_alpha() {
-        demultiply_alpha(pixmap.data_mut().as_rgba_mut());
-    }
+    let Some(subregion) = subregion.intersect(&region) else {
+        return Ok(Image::from_image(pixmap, cs));
+    };
 
-    convolve_matrix::apply(fe, pixmap.as_image_ref_mut());
+    if subregion == region {
+        if fe.preserve_alpha() {
+            demultiply_alpha(pixmap.data_mut().as_rgba_mut());
+        }
+        convolve_matrix::apply(fe, pixmap.as_image_ref_mut());
+    } else if let Some(mut sub) = pixmap.clone_rect(subregion) {
+        if fe.preserve_alpha() {
+            demultiply_alpha(sub.data_mut().as_rgba_mut());
+        }
+        convolve_matrix::apply(fe, sub.as_image_ref_mut());
+
+        let dst_stride = pixmap.width() as usize * 4;
+        let src_stride = sub.width() as usize * 4;
+        let x_offset = subregion.x() as usize * 4;
+        for row in 0..sub.height() as usize {
+            let dst_start = (subregion.y() as usize + row) * dst_stride + x_offset;
+            let src_start = row * src_stride;
+            pixmap.data_mut()[dst_start..dst_start + src_stride]
+                .copy_from_slice(&sub.data()[src_start..src_start + src_stride]);
+        }
+    }
 
     Ok(Image::from_image(pixmap, cs))
 }

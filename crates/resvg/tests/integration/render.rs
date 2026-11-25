@@ -104,6 +104,7 @@ use crate::render;
 #[test] fn filters_feConvolveMatrix_divisor_eq_0() { assert_eq!(render("tests/filters/feConvolveMatrix/divisor=0"), 0); }
 #[test] fn filters_feConvolveMatrix_edgeMode_eq_none() { assert_eq!(render("tests/filters/feConvolveMatrix/edgeMode=none"), 0); }
 #[test] fn filters_feConvolveMatrix_edgeMode_eq_wrap_with_matrix_larger_than_target() { assert_eq!(render("tests/filters/feConvolveMatrix/edgeMode=wrap-with-matrix-larger-than-target"), 0); }
+#[test] fn filters_feConvolveMatrix_edgeMode_eq_wrap_with_subregion() { assert_eq!(render("tests/filters/feConvolveMatrix/edgeMode=wrap-with-subregion"), 0); }
 #[test] fn filters_feConvolveMatrix_edgeMode_eq_wrap() { assert_eq!(render("tests/filters/feConvolveMatrix/edgeMode=wrap"), 0); }
 #[test] fn filters_feConvolveMatrix_empty_kernelMatrix() { assert_eq!(render("tests/filters/feConvolveMatrix/empty-kernelMatrix"), 0); }
 #[test] fn filters_feConvolveMatrix_kernelMatrix_with_not_enough_values() { assert_eq!(render("tests/filters/feConvolveMatrix/kernelMatrix-with-not-enough-values"), 0); }

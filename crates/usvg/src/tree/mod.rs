@@ -1662,6 +1662,8 @@ pub struct Image {
     pub(crate) size: Size,
     pub(crate) rendering_mode: ImageRendering,
     pub(crate) kind: ImageKind,
+    /// The `href` an [`ImageKind::RGBA`] image was resolved from, used by the writer.
+    #[cfg_attr(not(feature = "writer"), allow(dead_code))]
     pub(crate) href: Option<String>,
     pub(crate) abs_transform: Transform,
     pub(crate) abs_bounding_box: NonZeroRect,
